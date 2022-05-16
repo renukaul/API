@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "5c74c47a-6cfb-4f55-a996-cc5c58393867",
+		"name": "PetStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/{{PetId}}",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"{{PetId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get by Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status=available",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "available"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Adding a pet\",function() {\r",
+							"var jsonData = pm.response.json();\r",
+							"var petIdEnv = jsonData.id;\r",
+							"// console.log(petIdEnv);\r",
+							"pm.environment.set(\"PetId\",petIdEnv);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ID and Category Check\",function idcheck()\r",
+							"{\r",
+							"var reqJsonData = JSON.parse(pm.request.body.raw);\r",
+							"//using variable\r",
+							"var reqPetId = reqJsonData.id ;\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"var resPetId = jsonData.id;\r",
+							"pm.expect(reqPetId).to.eq(resPetId);\r",
+							"\r",
+							"//comparing json object \r",
+							"pm.expect(reqJsonData.category.id ).to.eq(jsonData.category.id);\r",
+							"\r",
+							"\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 100,\r\n  \"category\": {\r\n    \"id\": 20,\r\n    \"name\": \"cat\"\r\n  },\r\n  \"name\": \"kitty\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 30,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Modify a pet\",function() {\r",
+							"var jsonData = pm.response.json();\r",
+							"var petIdEnv = jsonData.id;\r",
+							"// console.log(petIdEnv);\r",
+							"pm.environment.set(\"PetId\",petIdEnv);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ID and Category Check\",function idcheck()\r",
+							"{\r",
+							"var reqJsonData = JSON.parse(pm.request.body.raw);\r",
+							"//using variable\r",
+							"var reqPetId = reqJsonData.id ;\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"var resPetId = jsonData.id;\r",
+							"pm.expect(reqPetId).to.eq(resPetId);\r",
+							"\r",
+							"//comparing json object \r",
+							"pm.expect(reqJsonData.category.id ).to.eq(jsonData.category.id);\r",
+							"\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 100,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"cat\"\r\n  },\r\n  \"name\": \"kittyCat\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://petstore.swagger.io/v2/pet",
+					"protocol": "https",
+					"host": [
+						"petstore",
+						"swagger",
+						"io"
+					],
+					"path": [
+						"v2",
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code check\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 100,\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"cat\"\r\n  },\r\n  \"name\": \"kittyCat\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseID}}/{{PetId}}",
+					"host": [
+						"{{baseID}}"
+					],
+					"path": [
+						"{{PetId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
